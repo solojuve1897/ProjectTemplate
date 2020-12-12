@@ -15,6 +15,7 @@ using System.Reflection;
 using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.EntityFramework.DbContexts;
 using System.Linq;
+using System;
 
 namespace ProjectTemplate.IdentityServer
 {
@@ -69,8 +70,28 @@ namespace ProjectTemplate.IdentityServer
                     options.TokenCleanupInterval = 30;
                 });
 
-            // not recommended for production - you need to store your key material somewhere secure
-            builder.AddDeveloperSigningCredential();
+            if (Environment.IsProduction())
+            {
+                try
+                {
+                    // For production. Read cert from external storage, e.g. Azure Keyvault.
+
+                    // Azure Keyvault code
+                    //var secretClient = new SecretClient(new Uri("https://...keyvault.vault.azure.net/"), new DefaultAzureCredential());
+                    //var certData = secretClient.GetSecretAsync("identityserver").GetAwaiter().GetResult();
+                    //var certificate = new X509Certificate2(Convert.FromBase64String(certData.Value.Value), (string)null, X509KeyStorageFlags.MachineKeySet);
+
+                    //builder.AddSigningCredential(certificate, "RS256");
+                }
+                catch (Exception ex)
+                {
+                    // Todo: return relevant exception
+                }
+            }
+            else
+            {
+                builder.AddDeveloperSigningCredential();
+            }
 
             services.AddAuthentication();
         }
