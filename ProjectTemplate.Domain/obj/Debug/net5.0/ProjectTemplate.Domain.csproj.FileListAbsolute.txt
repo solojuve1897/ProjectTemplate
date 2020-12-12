@@ -1,0 +1,12 @@
+C:\ProjectTemplate\ProjectTemplate.Domain\bin\Debug\net5.0\ProjectTemplate.Domain.deps.json
+C:\ProjectTemplate\ProjectTemplate.Domain\bin\Debug\net5.0\ProjectTemplate.Domain.dll
+C:\ProjectTemplate\ProjectTemplate.Domain\bin\Debug\net5.0\ref\ProjectTemplate.Domain.dll
+C:\ProjectTemplate\ProjectTemplate.Domain\bin\Debug\net5.0\ProjectTemplate.Domain.pdb
+C:\ProjectTemplate\ProjectTemplate.Domain\obj\Debug\net5.0\ProjectTemplate.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\ProjectTemplate\ProjectTemplate.Domain\obj\Debug\net5.0\ProjectTemplate.Domain.AssemblyInfoInputs.cache
+C:\ProjectTemplate\ProjectTemplate.Domain\obj\Debug\net5.0\ProjectTemplate.Domain.AssemblyInfo.cs
+C:\ProjectTemplate\ProjectTemplate.Domain\obj\Debug\net5.0\ProjectTemplate.Domain.csproj.CoreCompileInputs.cache
+C:\ProjectTemplate\ProjectTemplate.Domain\obj\Debug\net5.0\ProjectTemplate.Domain.dll
+C:\ProjectTemplate\ProjectTemplate.Domain\obj\Debug\net5.0\ref\ProjectTemplate.Domain.dll
+C:\ProjectTemplate\ProjectTemplate.Domain\obj\Debug\net5.0\ProjectTemplate.Domain.pdb
+C:\ProjectTemplate\ProjectTemplate.Domain\obj\Debug\net5.0\ProjectTemplate.Domain.csprojAssemblyReference.cache
