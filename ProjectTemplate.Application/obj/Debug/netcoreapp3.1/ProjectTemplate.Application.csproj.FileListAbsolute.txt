@@ -1,9 +1,0 @@
-C:\ProjectTemplate\ProjectTemplate.Application\bin\Debug\netcoreapp3.1\ProjectTemplate.Application.deps.json
-C:\ProjectTemplate\ProjectTemplate.Application\bin\Debug\netcoreapp3.1\ProjectTemplate.Application.dll
-C:\ProjectTemplate\ProjectTemplate.Application\bin\Debug\netcoreapp3.1\ProjectTemplate.Application.pdb
-C:\ProjectTemplate\ProjectTemplate.Application\obj\Debug\netcoreapp3.1\ProjectTemplate.Application.csprojAssemblyReference.cache
-C:\ProjectTemplate\ProjectTemplate.Application\obj\Debug\netcoreapp3.1\ProjectTemplate.Application.AssemblyInfoInputs.cache
-C:\ProjectTemplate\ProjectTemplate.Application\obj\Debug\netcoreapp3.1\ProjectTemplate.Application.AssemblyInfo.cs
-C:\ProjectTemplate\ProjectTemplate.Application\obj\Debug\netcoreapp3.1\ProjectTemplate.Application.csproj.CoreCompileInputs.cache
-C:\ProjectTemplate\ProjectTemplate.Application\obj\Debug\netcoreapp3.1\ProjectTemplate.Application.dll
-C:\ProjectTemplate\ProjectTemplate.Application\obj\Debug\netcoreapp3.1\ProjectTemplate.Application.pdb
