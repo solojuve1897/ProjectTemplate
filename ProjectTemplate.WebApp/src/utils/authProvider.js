@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { storeUser } from '../actions/authActions';
 import { setAuthHeader } from './axiosHeaders';
+import { signoutRedirect } from '../services/userService';
 
 export default function AuthProvider({
   userManager: manager,
@@ -23,15 +24,18 @@ export default function AuthProvider({
     };
 
     const onAccessTokenExpiring = () => {
+      // Todo: renew token or signout user
       console.log(`user token expiring`);
     };
 
     const onAccessTokenExpired = () => {
       console.log(`user token expired`);
+      signoutRedirect();
     };
 
     const onUserSignedOut = () => {
       console.log(`user signed out`);
+      signoutRedirect();
     };
 
     // events for user
