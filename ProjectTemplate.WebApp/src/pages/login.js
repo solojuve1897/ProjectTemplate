@@ -1,32 +1,30 @@
-import React from 'react'
-import { signinRedirect } from '../services/userService'
-import { Redirect } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import React from 'react';
+import { signinRedirect } from '../services/userService';
+import { Redirect } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 function Login() {
-  const user = useSelector(state => state.auth.user)
+  const user = useSelector((state) => state.auth.user);
 
   function login() {
-    signinRedirect()
+    signinRedirect();
   }
 
-  return (
-    (user) ?
-      (<Redirect to={'/'} />)
-      :
-      (
-        <div>
-          <h1>Hello!</h1>
-          <p>Welcome to We Want Doughnuts.</p>
-          <p>A demo of using React and Identity Server 4 to authenticate a user via OpenID Connect to gain access to a web API (and some lovely doughnuts).</p>
-          <p>Start by signing in.</p>
-          <p>💡 <strong>Tip: </strong><em>User: 'spiderman', Pass: 'spiderman'</em></p>
+  return user ? (
+    <Redirect to={'/'} />
+  ) : (
+    <div>
+      <h1>Hello!</h1>
+      <p>Welcome to this web app.</p>
+      <p>
+        A demo of using React and Identity Server 4 to authenticate a user via
+        OpenID Connect to gain access to a web API.
+      </p>
+      <p>Start by signing in.</p>
 
-          <button onClick={() => login()}>Login</button>
-          <p><a target='_blank' rel='noopener noreferrer' href='https://github.com/tappyy/react-IS4-auth-demo'>Github Repo</a></p>
-        </div>
-      )
-  )
+      <button onClick={() => login()}>Login</button>
+    </div>
+  );
 }
 
-export default Login
+export default Login;
