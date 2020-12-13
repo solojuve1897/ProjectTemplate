@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ProjectTemplate.Application;
 using ProjectTemplate.Application.Common.Interfaces;
@@ -56,11 +55,6 @@ namespace ProjectTemplate.WebAPI
                         options.Authority = Configuration["IdentityServer"];
                         options.RequireHttpsMetadata = !Environment.IsDevelopment();
                         options.Audience = "webapi";
-
-                        options.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateAudience = false
-                        };
                     });
 
             // Customise default API behaviour
