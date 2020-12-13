@@ -13,6 +13,7 @@ namespace ProjectTemplate.IdentityServer
                    new IdentityResource[]
                    {
                         new IdentityResources.OpenId(),
+                        new IdentityResources.Email(),
                         new IdentityResources.Profile(),
                    };
 
@@ -40,20 +41,15 @@ namespace ProjectTemplate.IdentityServer
                     // URL of client
                     ClientUri = "http://localhost:3000", 
                     // how client will interact with our identity server (Implicit is basic flow for web apps)
-                    AllowedGrantTypes = GrantTypes.Implicit, 
-                    // don't require client to send secret to token endpoint
-                    RequireClientSecret = false,
-                    RedirectUris =
-                    {             
-                        // can redirect here after login                     
-                        "http://localhost:3000/signin-oidc",
-                    },
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    // can redirect here after login     
+                    RedirectUris = { "http://localhost:3000/signin-oidc" },
                     // can redirect here after logout
-                    PostLogoutRedirectUris = { "http://localhost:3000/signout-oidc" }, 
+                    PostLogoutRedirectUris = { "http://localhost:3000/signout-oidc" },
                     // builds CORS policy for javascript clients
                     AllowedCorsOrigins = { "http://localhost:3000" }, 
                     // what resources this client can access
-                    AllowedScopes = { "openid", "profile", "webapi" }, 
+                    AllowedScopes = { "openid", "profile", "email", "webapi" }, 
                     // client is allowed to receive tokens via browser
                     AllowAccessTokensViaBrowser = true
                 },

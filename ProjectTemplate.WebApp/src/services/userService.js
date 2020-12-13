@@ -6,7 +6,7 @@ const config = {
   client_id: 'webapp',
   redirect_uri: process.env.REACT_APP_Webapp + '/signin-oidc',
   response_type: 'id_token token',
-  scope: 'openid profile webapi',
+  scope: 'openid profile email webapi',
   post_logout_redirect_uri: process.env.REACT_APP_Webapp + '/signout-oidc',
 };
 
@@ -34,8 +34,6 @@ export function signinRedirectCallback() {
 }
 
 export function signoutRedirect() {
-  userManager.clearStaleState();
-  userManager.removeUser();
   return userManager.signoutRedirect();
 }
 
