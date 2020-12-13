@@ -16,6 +16,7 @@ using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.EntityFramework.DbContexts;
 using System.Linq;
 using System;
+using IdentityServer4.EntityFramework.Entities;
 
 namespace ProjectTemplate.IdentityServer
 {
@@ -166,7 +167,9 @@ namespace ProjectTemplate.IdentityServer
                     context.SaveChanges();
                     foreach (var resource in Config.ApiResources)
                     {
-                        context.ApiResources.Add(resource.ToEntity());
+                        var entity = resource.ToEntity();
+                        entity.Scopes.Add(new ApiResourceScope { Scope = entity.Name });
+                        context.ApiResources.Add(entity);
                     }
                     context.SaveChanges();
                 }
