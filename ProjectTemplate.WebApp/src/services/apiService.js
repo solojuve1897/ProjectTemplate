@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 async function getDataFromApi() {
-  const response = await axios.get('https://localhost:44334/api/todolists');
+  const response = await axios.get(
+    process.env.REACT_APP_WebAPI + '/api/todolists'
+  );
   return response.data;
 }
 

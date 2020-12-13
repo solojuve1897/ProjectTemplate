@@ -13,10 +13,15 @@
     "react-scripts": "4.0.1",
     "redux": "^4.0.5"
   },
+  "devDependencies": {
+    "env-cmd": "^10.1.0",
+    "cross-env": "^7.0.3"
+  },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "build": "cross-env NODE_ENV=production react-scripts build",
+    "build:staging": "cross-env NODE_ENV=production env-cmd -f .env.staging react-scripts build",
+    "test": "cross-env NODE_ENV=production react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
