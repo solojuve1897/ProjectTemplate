@@ -63,15 +63,6 @@ namespace ProjectTemplate.WebAPI
                         };
                     });
 
-            //services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy("ApiScope", policy =>
-            //    {
-            //        policy.RequireAuthenticatedUser();
-            //        policy.RequireClaim("scope", "webapi");
-            //    });
-            //});
-
             // Customise default API behaviour
             services.Configure<ApiBehaviorOptions>(options =>
             {

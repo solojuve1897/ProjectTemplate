@@ -1,13 +1,10 @@
 ﻿using ProjectTemplate.Application.Common.Interfaces;
-using ProjectTemplate.Application.Common.Security;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace todo_app.Application.TodoLists.Commands.PurgeTodoLists
+namespace ProjectTemplate.Application.TodoLists.Commands.PurgeTodoLists
 {
-    [Authorize(Roles = "Administrator")]
-    [Authorize(Policy = "CanPurge")]
     public class PurgeTodoListsCommand : IRequest
     {
     }

@@ -83,7 +83,7 @@ namespace ProjectTemplate.IdentityServer
 
                     //builder.AddSigningCredential(certificate, "RS256");
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // Todo: return relevant exception
                 }
