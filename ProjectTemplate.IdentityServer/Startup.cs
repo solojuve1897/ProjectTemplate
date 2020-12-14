@@ -167,9 +167,7 @@ namespace ProjectTemplate.IdentityServer
                     context.SaveChanges();
                     foreach (var resource in Config.ApiResources)
                     {
-                        var entity = resource.ToEntity();
-                        entity.Scopes.Add(new ApiResourceScope { Scope = entity.Name });
-                        context.ApiResources.Add(entity);
+                        context.ApiResources.Add(resource.ToEntity());
                     }
                     context.SaveChanges();
                 }
