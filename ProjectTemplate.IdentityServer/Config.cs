@@ -14,19 +14,20 @@ namespace ProjectTemplate.IdentityServer
                    {
                         new IdentityResources.OpenId(),
                         new IdentityResources.Profile(),
+                        new IdentityResources.Email(),
                         new IdentityResource
                         {
-                          Name = "role",
-                          UserClaims = new List<string> {"role"}
+                          Name = "extra",
+                          UserClaims = new List<string> {"role", "location"}
                         }
                    };
 
         public static IEnumerable<ApiResource> ApiResources =>
             new ApiResource[]
             {
-                new ApiResource("webapi", "ProjectTemplate.WebAPI") {
-                    Scopes = new List<string> { "webapi.read", "webapi.write"},
-                    UserClaims = new List<string> {"role"}
+                new ApiResource("webapi", "ProjectTemplate.WebAPI")
+                {
+                    Scopes = new List<string> {"webapi.read", "webapi.write"},
                 },
             };
 
@@ -57,7 +58,7 @@ namespace ProjectTemplate.IdentityServer
                     // builds CORS policy for javascript clients
                     AllowedCorsOrigins = { "http://localhost:3000" }, 
                     // what resources this client can access
-                    AllowedScopes = { "openid", "profile", "webapi.read", "webapi.write" }, 
+                    AllowedScopes = { "openid", "profile", "email", "extra", "webapi.read", "webapi.write" }, 
                     // client is allowed to receive tokens via browser
                     AllowAccessTokensViaBrowser = true
                 },

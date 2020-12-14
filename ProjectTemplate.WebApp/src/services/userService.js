@@ -6,7 +6,7 @@ const config = {
   client_id: 'webapp',
   redirect_uri: process.env.REACT_APP_Webapp + '/signin-oidc',
   response_type: 'id_token token',
-  scope: 'openid profile webapi.read webapi.write',
+  scope: 'openid profile email extra webapi.read webapi.write',
   post_logout_redirect_uri: process.env.REACT_APP_Webapp + '/signout-oidc',
 };
 
