@@ -16,7 +16,6 @@ using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.EntityFramework.DbContexts;
 using System.Linq;
 using System;
-using IdentityServer4.EntityFramework.Entities;
 
 namespace ProjectTemplate.IdentityServer
 {
