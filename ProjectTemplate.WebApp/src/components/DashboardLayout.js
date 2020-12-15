@@ -20,6 +20,16 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
   },
+  navigation: {
+    display: 'flex',
+  },
+  navigationText: {
+    display: 'flex',
+    flex: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: 32,
+  },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
   },
@@ -140,10 +150,13 @@ export default function Dashboard({ children }) {
         }}
         open={open}
       >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
+        <div className={classes.navigation}>
+          <div className={classes.navigationText}>NAVIGATION</div>
+          <div className={classes.toolbarIcon}>
+            <IconButton onClick={handleDrawerClose}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </div>
         </div>
         <Divider />
         <List>
