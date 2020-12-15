@@ -1,20 +1,29 @@
 import React, { useState } from 'react';
-import { signoutRedirect } from '../services/userService';
 import { useSelector } from 'react-redux';
 import * as apiService from '../services/apiService';
 import { prettifyJson } from '../utils/jsonUtils';
+import { Button, makeStyles } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+  code: {
+    textAlign: 'left',
+    color: '#fff',
+    backgroundColor: '#000',
+    borderRadius: 5,
+    padding: 20,
+  },
+}));
 
 function Home() {
   const user = useSelector((state) => state.auth.user);
   const [data, setData] = useState(null);
-  function signOut() {
-    signoutRedirect();
-  }
 
   async function getData() {
     const result = await apiService.getDataFromApi();
     setData(result);
   }
+
+  const classes = useStyles();
 
   return (
     <div>
@@ -29,17 +38,14 @@ function Home() {
           returned from identity and stored in the client.
         </em>
       </p>
-
-      <button className='button button-outline' onClick={() => getData()}>
+      <Button onClick={() => getData()} variant='contained' color='secondary'>
         Call API
-      </button>
-      <button className='button button-clear' onClick={() => signOut()}>
-        Sign Out
-      </button>
-
-      <pre>
-        <code>{prettifyJson(data ? data : 'No call to API made yet :(')}</code>
-      </pre>
+      </Button>
+      {data && (
+        <pre className={classes.code}>
+          <code>{prettifyJson(data)}</code>
+        </pre>
+      )}
     </div>
   );
 }
