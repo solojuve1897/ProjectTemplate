@@ -1,22 +1,23 @@
-import React, { useEffect } from 'react'
-import { signoutRedirectCallback } from '../services/userService'
-import { useHistory } from 'react-router-dom'
+import React, { useEffect } from 'react';
+import { signoutRedirectCallback } from '../services/userService';
+import { useHistory } from 'react-router-dom';
+import { LinearProgress } from '@material-ui/core';
 
 function SignoutOidc() {
-  const history = useHistory()
+  const history = useHistory();
   useEffect(() => {
     async function signoutAsync() {
-      await signoutRedirectCallback()
-      history.push('/')
+      await signoutRedirectCallback();
+      history.push('/');
     }
-    signoutAsync()
-  }, [history])
+    signoutAsync();
+  }, [history]);
 
   return (
     <div>
-      Redirecting...
+      <LinearProgress />
     </div>
-  )
+  );
 }
 
-export default SignoutOidc
+export default SignoutOidc;

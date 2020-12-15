@@ -1,22 +1,23 @@
-import React, { useEffect } from 'react'
-import { signinRedirectCallback } from '../services/userService'
-import { useHistory } from 'react-router-dom'
+import React, { useEffect } from 'react';
+import { signinRedirectCallback } from '../services/userService';
+import { useHistory } from 'react-router-dom';
+import { LinearProgress } from '@material-ui/core';
 
 function SigninOidc() {
-  const history = useHistory()
+  const history = useHistory();
   useEffect(() => {
     async function signinAsync() {
-      await signinRedirectCallback()
-      history.push('/')
+      await signinRedirectCallback();
+      history.push('/');
     }
-    signinAsync()
-  }, [history])
+    signinAsync();
+  }, [history]);
 
   return (
     <div>
-      Redirecting...
+      <LinearProgress />
     </div>
-  )
+  );
 }
 
-export default SigninOidc
+export default SigninOidc;
