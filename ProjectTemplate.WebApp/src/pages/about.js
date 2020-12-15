@@ -17,7 +17,11 @@ function About() {
         <a href='https://material-ui.com' target='_blank' rel='noreferrer'>
           Material UI
         </a>{' '}
-        for content and styling. Redux is used for state management.
+        for content and styling.{' '}
+        <a href='https://redux.js.org' target='_blank' rel='noreferrer'>
+          Redux
+        </a>{' '}
+        is used for state management.
       </p>
       <p>
         For handling HTTP requests{' '}
@@ -37,7 +41,7 @@ function About() {
           target='_blank'
           rel='noreferrer'
         >
-          Identity Server 4
+          IdentityServer 4
         </a>{' '}
         instance is used which authenticates the user via OpenID Connect.
       </p>

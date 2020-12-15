@@ -28,8 +28,10 @@ function Home() {
   return (
     <div>
       <h1>Home</h1>
-      <p>Hello, {user.profile.name}.</p>
-      <p>I have given you a token to call your API</p>
+      <p>
+        Hello, <strong>{user.profile.name}</strong>.
+      </p>
+      <p>I have given you a token to call your API.</p>
 
       <p>
         💡 <strong>Tip: </strong>
