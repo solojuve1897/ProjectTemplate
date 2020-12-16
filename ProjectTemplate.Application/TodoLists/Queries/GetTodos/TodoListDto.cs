@@ -1,5 +1,6 @@
 ﻿using ProjectTemplate.Application.Common.Mappings;
 using ProjectTemplate.Domain.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace ProjectTemplate.Application.TodoLists.Queries.GetTodos
@@ -14,6 +15,8 @@ namespace ProjectTemplate.Application.TodoLists.Queries.GetTodos
         public int Id { get; set; }
 
         public string Title { get; set; }
+
+        public DateTime? LastModified { get; set; }
 
         public IList<TodoItemDto> Items { get; set; }
     }

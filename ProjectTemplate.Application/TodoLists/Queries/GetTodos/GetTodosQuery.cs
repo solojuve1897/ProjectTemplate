@@ -32,13 +32,13 @@ namespace ProjectTemplate.Application.TodoLists.Queries.GetTodos
             {
                 PriorityLevels = Enum.GetValues(typeof(PriorityLevel))
                     .Cast<PriorityLevel>()
-                    .Select(p => new PriorityLevelDto { Value = (int)p, Name = p.ToString() })
-                    .ToList(),
+                    .Select(p => new { Value = (int)p, Name = p.ToString() })
+                    .ToDictionary(x => x.Value, x => x.Name),
 
                 Lists = await _context.TodoLists
                     .AsNoTracking()
                     .ProjectTo<TodoListDto>(_mapper.ConfigurationProvider)
-                    .OrderBy(t => t.Title)
+                    .OrderByDescending(t => t.LastModified)
                     .ToListAsync(cancellationToken)
             };
         }

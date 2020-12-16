@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import SigninOidc from './pages/signin-oidc';
 import SignoutOidc from './pages/signout-oidc';
 import Home from './pages/home';
+import Todo from './pages/todo';
 import About from './pages/about';
 import Login from './pages/login';
 import { Provider } from 'react-redux';
@@ -13,12 +14,9 @@ import PrivateRoute from './utils/protectedRoute';
 import DashboardLayout from './components/DashboardLayout';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core';
 
-function App() {
-  useEffect(() => {
-    // fetch current user from cookies
-    loadUserFromStorage(store);
-  }, []);
+loadUserFromStorage(store);
 
+function App() {
   const theme = createMuiTheme({
     typography: {
       fontSize: 16,
@@ -36,6 +34,7 @@ function App() {
                 <Route path='/signout-oidc' component={SignoutOidc} />
                 <Route path='/signin-oidc' component={SigninOidc} />
                 <PrivateRoute exact path='/' component={Home} />
+                <Route path='/todo' component={Todo} />
                 <Route path='/about' component={About} />
               </Switch>
             </DashboardLayout>
