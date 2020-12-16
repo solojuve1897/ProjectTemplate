@@ -8,7 +8,7 @@ function About() {
 
   useEffect(() => {
     async function getData() {
-      const result = await apiService.getDataFromApi();
+      const result = await apiService.getTodoLists();
       setData(result);
     }
     getData();
@@ -21,7 +21,7 @@ function About() {
       ) : (
         <div>
           <h1>To-Do Lists</h1>
-          <TodoListsContainer data={data} />
+          <TodoListsContainer setData={setData} data={data} />
         </div>
       )}
     </div>

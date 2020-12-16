@@ -19,7 +19,7 @@ function Home() {
   const [data, setData] = useState(null);
 
   async function getData() {
-    const result = await apiService.getDataFromApi();
+    const result = await apiService.getTodoLists();
     setData(result);
   }
 

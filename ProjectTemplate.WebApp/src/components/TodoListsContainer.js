@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import * as apiService from '../services/apiService';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
@@ -41,13 +42,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TodoListsContainer({ data }) {
+export default function TodoListsContainer({ setData, data }) {
   const classes = useStyles();
   const [selected, setSelected] = useState(data.lists[0]);
 
+  const toggleTodoItem = (id, done) => {
+    const itemIndex = selected.items.findIndex((item) => item.id === id);
+    const itemToUpdate = { ...selected.items[itemIndex], done: done };
+    apiService.updateTodoItem(id, itemToUpdate).then(() => {
+      selected.items[itemIndex] = itemToUpdate;
+      setData({ ...data, selected });
+    });
+  };
+
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} lg={4}>
+      <Grid item xs={12} lg={5}>
         <Grid container justify='flex-end'>
           <Grid item>
             <Button startIcon={<AddIcon />}>Add list</Button>
@@ -60,7 +70,7 @@ export default function TodoListsContainer({ data }) {
           setSelected={setSelected}
         />
       </Grid>
-      <Grid item xs={12} lg={8}>
+      <Grid item xs={12} lg={7}>
         <Grid container justify='flex-end'>
           <Grid item>
             <Button startIcon={<AddIcon />}>Add item</Button>
@@ -71,6 +81,7 @@ export default function TodoListsContainer({ data }) {
             priorityLevels={data.priorityLevels}
             classes={classes}
             selected={selected}
+            toggleTodoItem={toggleTodoItem}
           />
         ) : (
           <Typography>This list is empty.</Typography>

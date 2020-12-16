@@ -16,7 +16,12 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
-export default function TodoListsItems({ selected, priorityLevels, classes }) {
+export default function TodoListsItems({
+  selected,
+  priorityLevels,
+  classes,
+  toggleTodoItem,
+}) {
   const getPriorityIcon = (val) => {
     switch (val) {
       case 0:
@@ -57,6 +62,7 @@ export default function TodoListsItems({ selected, priorityLevels, classes }) {
           <ListItem
             key={item.id}
             className={item.done ? classes.bgSucces : ''}
+            button
             dense
           >
             <ListItemAvatar>
@@ -73,7 +79,11 @@ export default function TodoListsItems({ selected, priorityLevels, classes }) {
               secondary={item.note ? item.note : 'No desc.'}
             />
             <ListItemSecondaryAction>
-              <IconButton edge='end' aria-label='action'>
+              <IconButton
+                onClick={() => toggleTodoItem(item.id, !item.done)}
+                edge='end'
+                aria-label='action'
+              >
                 {item.done ? <CloseIcon /> : <DoneIcon />}
               </IconButton>
               <IconButton edge='end' aria-label='delete'>
