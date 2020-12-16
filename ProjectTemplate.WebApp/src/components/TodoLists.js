@@ -34,8 +34,13 @@ export default function TodoLists({ lists, selected, setSelected, classes }) {
               onClick={() => setSelected(list)}
             >
               <ListItemAvatar>
-                <Avatar className={clsx(classes.small, classes.bgSecondary)}>
-                  {itemsCount}
+                <Avatar
+                  className={clsx(
+                    classes.small,
+                    itemsCount > 0 ? classes.bgSecondary : ''
+                  )}
+                >
+                  <strong>{itemsCount}</strong>
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
