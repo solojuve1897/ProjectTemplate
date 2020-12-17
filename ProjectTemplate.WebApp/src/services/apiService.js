@@ -7,20 +7,41 @@ async function getTodoLists() {
   return response.data;
 }
 
-async function updateTodoList(id, data) {
+async function updateTodoList(id, payload) {
   const response = await axios.put(
     process.env.REACT_APP_WebAPI + '/api/todolists/' + id,
-    data
+    payload
   );
   return response.data;
 }
 
-async function updateTodoItem(id, data) {
+async function addTodoList(payload) {
+  const response = await axios.post(
+    process.env.REACT_APP_WebAPI + '/api/todolists',
+    payload
+  );
+  return response.data;
+}
+
+async function deleteTodoList(id) {
+  const response = await axios.delete(
+    process.env.REACT_APP_WebAPI + '/api/todolists/' + id
+  );
+  return response.data;
+}
+
+async function updateTodoItem(id, payload) {
   const response = await axios.put(
     process.env.REACT_APP_WebAPI + '/api/todoitems/' + id,
-    data
+    payload
   );
   return response.data;
 }
 
-export { getTodoLists, updateTodoList, updateTodoItem };
+export {
+  getTodoLists,
+  updateTodoList,
+  addTodoList,
+  deleteTodoList,
+  updateTodoItem,
+};

@@ -17,7 +17,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 export default function TodoListsItems({
-  selected,
+  selectedList,
   priorityLevels,
   classes,
   toggleTodoItem,
@@ -54,12 +54,12 @@ export default function TodoListsItems({
     <List
       subheader={
         <ListSubheader className={classes.subheader}>
-          Items for {selected.title}
+          Items for {selectedList.title}
         </ListSubheader>
       }
       className={classes.root}
     >
-      {selected.items.map((item) => {
+      {selectedList.items.map((item) => {
         return (
           <ListItem
             key={item.id}

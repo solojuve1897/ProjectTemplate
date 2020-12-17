@@ -18,6 +18,7 @@ export default function TodoLists({
   selected,
   setSelected,
   openUpdateListModal,
+  deleteList,
   classes,
 }) {
   return (
@@ -62,7 +63,11 @@ export default function TodoLists({
                   >
                     <EditIcon />
                   </IconButton>
-                  <IconButton edge='end' aria-label='delete'>
+                  <IconButton
+                    edge='end'
+                    aria-label='delete'
+                    onClick={deleteList}
+                  >
                     <DeleteIcon />
                   </IconButton>
                 </ListItemSecondaryAction>

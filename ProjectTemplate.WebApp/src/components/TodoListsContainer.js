@@ -52,32 +52,56 @@ const useStyles = makeStyles((theme) => ({
 export default function TodoListsContainer({ setData, data }) {
   const classes = useStyles();
   const formRef = useRef();
-  const [selected, setSelected] = useState(data.lists[0]);
+  const [selectedList, setSelectedList] = useState(data.lists[0]);
   const [modal, setModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const addList = (title) => {};
+  const addList = async (title) => {
+    setLoading(true);
+    const payload = {
+      title: title,
+    };
+    const listToAdd = await apiService.addTodoList(payload);
+    data.lists.unshift(listToAdd);
+    setData({ ...data });
+    setSelectedList(data.lists[0]);
+    setLoading(false);
+    setModal(false);
+  };
 
   const updateList = async (title) => {
     setLoading(true);
     const payload = {
-      id: selected.id,
+      id: selectedList.id,
       title: title,
     };
-    await apiService.updateTodoList(selected.id, payload);
+    await apiService.updateTodoList(selectedList.id, payload);
     const listIndex = data.lists.findIndex((list) => list.id === payload.id);
     data.lists[listIndex] = { ...data.lists[listIndex], ...payload };
-    setSelected(data.lists[listIndex]);
+    setSelectedList(data.lists[listIndex]);
+    setLoading(false);
+    setModal(false);
+  };
+
+  const deleteList = async () => {
+    setLoading(true);
+    await apiService.deleteTodoList(selectedList.id);
+    const listIndex = data.lists.findIndex(
+      (list) => list.id === selectedList.id
+    );
+    data.lists.splice(listIndex, 1);
+    setData({ ...data });
+    setSelectedList(data.lists[0]);
     setLoading(false);
     setModal(false);
   };
 
   const toggleTodoItem = (id, done) => {
-    const itemIndex = selected.items.findIndex((item) => item.id === id);
-    const itemToUpdate = { ...selected.items[itemIndex], done: done };
+    const itemIndex = selectedList.items.findIndex((item) => item.id === id);
+    const itemToUpdate = { ...selectedList.items[itemIndex], done: done };
     apiService.updateTodoItem(id, itemToUpdate).then(() => {
-      selected.items[itemIndex] = itemToUpdate;
+      selectedList.items[itemIndex] = itemToUpdate;
       setData({ ...data });
     });
   };
@@ -101,12 +125,13 @@ export default function TodoListsContainer({ setData, data }) {
         <TodoLists
           lists={data.lists}
           classes={classes}
-          selected={selected}
-          setSelected={setSelected}
+          selected={selectedList}
+          setSelected={setSelectedList}
           openUpdateListModal={() => {
             setEditMode(true);
             setModal(true);
           }}
+          deleteList={() => deleteList()}
         />
       </Grid>
       <Grid item xs={12} lg={7}>
@@ -115,11 +140,11 @@ export default function TodoListsContainer({ setData, data }) {
             <Button startIcon={<AddIcon />}>Add item</Button>
           </Grid>
         </Grid>
-        {selected.items.length > 0 ? (
+        {selectedList.items.length > 0 ? (
           <TodoListsItems
             priorityLevels={data.priorityLevels}
             classes={classes}
-            selected={selected}
+            selectedList={selectedList}
             toggleTodoItem={toggleTodoItem}
           />
         ) : (
@@ -136,7 +161,7 @@ export default function TodoListsContainer({ setData, data }) {
         <Formik
           innerRef={formRef}
           initialValues={{
-            title: editMode ? selected.title : '',
+            title: editMode ? selectedList.title : '',
           }}
           validationSchema={Yup.object().shape({
             title: Yup.string().required('Required'),
