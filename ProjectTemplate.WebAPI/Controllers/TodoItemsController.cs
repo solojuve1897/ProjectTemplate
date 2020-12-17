@@ -21,7 +21,7 @@ namespace ProjectTemplate.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create(CreateTodoItemCommand command)
+        public async Task<ActionResult<TodoItemDto>> Create(CreateTodoItemCommand command)
         {
             return await Mediator.Send(command);
         }

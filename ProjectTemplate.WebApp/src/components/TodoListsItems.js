@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Avatar from '@material-ui/core/Avatar';
+import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
@@ -20,7 +21,8 @@ export default function TodoListsItems({
   selectedList,
   priorityLevels,
   classes,
-  toggleTodoItem,
+  openUpdateListItemModal,
+  toggleListItem,
 }) {
   const getPriorityIcon = (val) => {
     switch (val) {
@@ -82,11 +84,18 @@ export default function TodoListsItems({
             />
             <ListItemSecondaryAction>
               <IconButton
-                onClick={() => toggleTodoItem(item.id, !item.done)}
+                onClick={() => toggleListItem(item.id, !item.done)}
                 edge='end'
                 aria-label='action'
               >
                 {item.done ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
+              </IconButton>
+              <IconButton
+                edge='end'
+                aria-label='edit'
+                onClick={() => openUpdateListItemModal(item)}
+              >
+                <EditIcon />
               </IconButton>
               <IconButton edge='end' aria-label='delete'>
                 <DeleteIcon />

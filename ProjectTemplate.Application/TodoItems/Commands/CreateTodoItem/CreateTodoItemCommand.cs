@@ -3,26 +3,30 @@ using ProjectTemplate.Domain.Entities;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using ProjectTemplate.Application.TodoLists.Queries.GetTodos;
+using AutoMapper;
 
 namespace ProjectTemplate.Application.TodoItems.Commands.CreateTodoItem
 {
-    public class CreateTodoItemCommand : IRequest<int>
+    public class CreateTodoItemCommand : IRequest<TodoItemDto>
     {
         public int ListId { get; set; }
 
         public string Title { get; set; }
     }
 
-    public class CreateTodoItemCommandHandler : IRequestHandler<CreateTodoItemCommand, int>
+    public class CreateTodoItemCommandHandler : IRequestHandler<CreateTodoItemCommand, TodoItemDto>
     {
         private readonly IApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public CreateTodoItemCommandHandler(IApplicationDbContext context)
+        public CreateTodoItemCommandHandler(IApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<int> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
+        public async Task<TodoItemDto> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
         {
             var entity = new TodoItem
             {
@@ -35,7 +39,7 @@ namespace ProjectTemplate.Application.TodoItems.Commands.CreateTodoItem
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return entity.Id;
+            return _mapper.Map<TodoItemDto>(entity);
         }
     }
 }

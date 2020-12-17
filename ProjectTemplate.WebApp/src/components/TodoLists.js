@@ -66,7 +66,7 @@ export default function TodoLists({
                   <IconButton
                     edge='end'
                     aria-label='delete'
-                    onClick={deleteList}
+                    onClick={() => deleteList()}
                   >
                     <DeleteIcon />
                   </IconButton>

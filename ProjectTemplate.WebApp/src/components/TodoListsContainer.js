@@ -53,7 +53,9 @@ export default function TodoListsContainer({ setData, data }) {
   const classes = useStyles();
   const formRef = useRef();
   const [selectedList, setSelectedList] = useState(data.lists[0]);
-  const [modal, setModal] = useState(false);
+  const [selectedListItem, setSelectedListItem] = useState(null);
+  const [listModal, setListModal] = useState(false);
+  const [listItemModal, setListItemModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -67,7 +69,7 @@ export default function TodoListsContainer({ setData, data }) {
     setData({ ...data });
     setSelectedList(data.lists[0]);
     setLoading(false);
-    setModal(false);
+    setListModal(false);
   };
 
   const updateList = async (title) => {
@@ -81,7 +83,7 @@ export default function TodoListsContainer({ setData, data }) {
     data.lists[listIndex] = { ...data.lists[listIndex], ...payload };
     setSelectedList(data.lists[listIndex]);
     setLoading(false);
-    setModal(false);
+    setListModal(false);
   };
 
   const deleteList = async () => {
@@ -94,16 +96,46 @@ export default function TodoListsContainer({ setData, data }) {
     setData({ ...data });
     setSelectedList(data.lists[0]);
     setLoading(false);
-    setModal(false);
+    setListModal(false);
   };
 
-  const toggleTodoItem = (id, done) => {
+  const toggleListItem = (id, done) => {
     const itemIndex = selectedList.items.findIndex((item) => item.id === id);
     const itemToUpdate = { ...selectedList.items[itemIndex], done: done };
     apiService.updateTodoItem(id, itemToUpdate).then(() => {
       selectedList.items[itemIndex] = itemToUpdate;
       setData({ ...data });
     });
+  };
+
+  const updateListItem = async (payload) => {
+    setLoading(true);
+    const itemIndex = selectedList.items.findIndex(
+      (item) => item.id === selectedListItem.id
+    );
+    const itemToUpdate = { ...selectedList.items[itemIndex], ...payload };
+    await apiService.updateTodoItemDetails(selectedListItem.id, itemToUpdate);
+    selectedList.items[itemIndex] = itemToUpdate;
+    setData({ ...data });
+    setLoading(false);
+    setListItemModal(false);
+  };
+
+  const addListItem = async (payload) => {
+    setLoading(true);
+    payload = {
+      listId: selectedList.id,
+      ...payload,
+    };
+    const listItemToAdd = await apiService.addTodoItem(payload);
+    const listIndex = data.lists.findIndex(
+      (list) => list.id === selectedList.id
+    );
+    data.lists[listIndex].items.unshift(listItemToAdd);
+    setData({ ...data });
+    // setSelectedList(data.lists[0]);
+    setLoading(false);
+    setListItemModal(false);
   };
 
   return (
@@ -114,7 +146,7 @@ export default function TodoListsContainer({ setData, data }) {
             <Button
               onClick={() => {
                 setEditMode(false);
-                setModal(true);
+                setListModal(true);
               }}
               startIcon={<AddIcon />}
             >
@@ -129,15 +161,23 @@ export default function TodoListsContainer({ setData, data }) {
           setSelected={setSelectedList}
           openUpdateListModal={() => {
             setEditMode(true);
-            setModal(true);
+            setListModal(true);
           }}
-          deleteList={() => deleteList()}
+          deleteList={deleteList}
         />
       </Grid>
       <Grid item xs={12} lg={7}>
         <Grid container justify='flex-end'>
           <Grid item>
-            <Button startIcon={<AddIcon />}>Add item</Button>
+            <Button
+              onClick={() => {
+                setEditMode(false);
+                setListItemModal(true);
+              }}
+              startIcon={<AddIcon />}
+            >
+              Add item
+            </Button>
           </Grid>
         </Grid>
         {selectedList.items.length > 0 ? (
@@ -145,15 +185,20 @@ export default function TodoListsContainer({ setData, data }) {
             priorityLevels={data.priorityLevels}
             classes={classes}
             selectedList={selectedList}
-            toggleTodoItem={toggleTodoItem}
+            openUpdateListItemModal={(item) => {
+              setSelectedListItem(item);
+              setEditMode(true);
+              setListItemModal(true);
+            }}
+            toggleListItem={toggleListItem}
           />
         ) : (
           <Typography>This list is empty.</Typography>
         )}
       </Grid>
       <Modal
-        open={modal}
-        handleClose={() => setModal(false)}
+        open={listModal}
+        handleClose={() => setListModal(false)}
         handleSubmit={() => formRef.current.handleSubmit()}
         title={editMode ? 'Edit List' : 'Add List'}
         loading={loading}
@@ -168,6 +213,45 @@ export default function TodoListsContainer({ setData, data }) {
           })}
           onSubmit={(values) =>
             editMode ? updateList(values.title) : addList(values.title)
+          }
+        >
+          {({ errors, handleBlur, handleChange, touched, values }) => (
+            <div style={{ padding: 8 }}>
+              <Grid container spacing={4}>
+                <Grid xs={12} item>
+                  <TextField
+                    error={Boolean(touched.title && errors.title)}
+                    helperText={touched.title && errors.title}
+                    label='Title'
+                    name='title'
+                    value={values.title}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
+            </div>
+          )}
+        </Formik>
+      </Modal>
+      <Modal
+        open={listItemModal}
+        handleClose={() => setListItemModal(false)}
+        handleSubmit={() => formRef.current.handleSubmit()}
+        title={editMode ? 'Edit Item' : 'Add Item'}
+        loading={loading}
+      >
+        <Formik
+          innerRef={formRef}
+          initialValues={{
+            title: editMode ? selectedListItem.title : '',
+          }}
+          validationSchema={Yup.object().shape({
+            title: Yup.string().required('Required'),
+          })}
+          onSubmit={(values) =>
+            editMode ? updateListItem(values) : addListItem(values)
           }
         >
           {({ errors, handleBlur, handleChange, touched, values }) => (

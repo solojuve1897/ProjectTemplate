@@ -38,10 +38,28 @@ async function updateTodoItem(id, payload) {
   return response.data;
 }
 
+async function updateTodoItemDetails(id, payload) {
+  const response = await axios.put(
+    process.env.REACT_APP_WebAPI + '/api/todoitems/updateitemdetails?id=' + id,
+    payload
+  );
+  return response.data;
+}
+
+async function addTodoItem(payload) {
+  const response = await axios.post(
+    process.env.REACT_APP_WebAPI + '/api/todoitems',
+    payload
+  );
+  return response.data;
+}
+
 export {
   getTodoLists,
   updateTodoList,
   addTodoList,
   deleteTodoList,
   updateTodoItem,
+  updateTodoItemDetails,
+  addTodoItem,
 };

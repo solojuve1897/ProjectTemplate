@@ -14,6 +14,8 @@ namespace ProjectTemplate.Application.TodoItems.Commands.UpdateTodoItemDetail
 
         public int ListId { get; set; }
 
+        public string Title { get; set; }
+
         public PriorityLevel Priority { get; set; }
 
         public string Note { get; set; }
@@ -38,6 +40,7 @@ namespace ProjectTemplate.Application.TodoItems.Commands.UpdateTodoItemDetail
             }
 
             entity.ListId = request.ListId;
+            entity.Title = request.Title;
             entity.Priority = request.Priority;
             entity.Note = request.Note;
 
