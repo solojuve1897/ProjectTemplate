@@ -7,6 +7,14 @@ async function getTodoLists() {
   return response.data;
 }
 
+async function updateTodoList(id, data) {
+  const response = await axios.put(
+    process.env.REACT_APP_WebAPI + '/api/todolists/' + id,
+    data
+  );
+  return response.data;
+}
+
 async function updateTodoItem(id, data) {
   const response = await axios.put(
     process.env.REACT_APP_WebAPI + '/api/todoitems/' + id,
@@ -15,4 +23,4 @@ async function updateTodoItem(id, data) {
   return response.data;
 }
 
-export { getTodoLists, updateTodoItem };
+export { getTodoLists, updateTodoList, updateTodoItem };

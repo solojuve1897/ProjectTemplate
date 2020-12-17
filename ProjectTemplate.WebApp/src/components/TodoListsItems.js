@@ -7,8 +7,8 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
-import DoneIcon from '@material-ui/icons/Done';
-import CloseIcon from '@material-ui/icons/Close';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Avatar from '@material-ui/core/Avatar';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
@@ -53,7 +53,9 @@ export default function TodoListsItems({
   return (
     <List
       subheader={
-        <ListSubheader className={classes.subheader}>Items</ListSubheader>
+        <ListSubheader className={classes.subheader}>
+          Items for {selected.title}
+        </ListSubheader>
       }
       className={classes.root}
     >
@@ -61,7 +63,7 @@ export default function TodoListsItems({
         return (
           <ListItem
             key={item.id}
-            className={item.done ? classes.bgSucces : ''}
+            className={item.done ? classes.bgSuccesLight : ''}
             button
             dense
           >
@@ -84,7 +86,7 @@ export default function TodoListsItems({
                 edge='end'
                 aria-label='action'
               >
-                {item.done ? <CloseIcon /> : <DoneIcon />}
+                {item.done ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
               </IconButton>
               <IconButton edge='end' aria-label='delete'>
                 <DeleteIcon />

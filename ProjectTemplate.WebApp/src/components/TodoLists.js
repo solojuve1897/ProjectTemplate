@@ -8,12 +8,18 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
-
 import ListSubheader from '@material-ui/core/ListSubheader';
 
-export default function TodoLists({ lists, selected, setSelected, classes }) {
+export default function TodoLists({
+  lists,
+  selected,
+  setSelected,
+  openUpdateListModal,
+  classes,
+}) {
   return (
     <List
       subheader={
@@ -37,7 +43,7 @@ export default function TodoLists({ lists, selected, setSelected, classes }) {
                 <Avatar
                   className={clsx(
                     classes.small,
-                    itemsCount > 0 ? classes.bgSecondary : ''
+                    itemsCount > 0 ? classes.bgSecondary : classes.bgSuccess
                   )}
                 >
                   <strong>{itemsCount}</strong>
@@ -47,11 +53,20 @@ export default function TodoLists({ lists, selected, setSelected, classes }) {
                 primary={list.title}
                 secondary={formatDateTime(list.lastModified)}
               />
-              <ListItemSecondaryAction>
-                <IconButton edge='end' aria-label='delete'>
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
+              {selected.id === list.id && (
+                <ListItemSecondaryAction>
+                  <IconButton
+                    edge='end'
+                    aria-label='edit'
+                    onClick={openUpdateListModal}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton edge='end' aria-label='delete'>
+                    <DeleteIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              )}
             </ListItem>
             <Divider variant='inset' component='li' />
           </div>
