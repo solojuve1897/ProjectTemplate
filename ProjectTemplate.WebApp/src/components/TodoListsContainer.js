@@ -51,9 +51,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TodoListsContainer({ setData, data }) {
   const classes = useStyles();
-  const formRef = useRef();
+  const listItemFormRef = useRef();
+  const listFormRef = useRef();
   const [selectedList, setSelectedList] = useState(data.lists[0]);
-  const [selectedListItem, setSelectedListItem] = useState(null);
+  const [selectedListItem, setSelectedListItem] = useState({});
   const [listModal, setListModal] = useState(false);
   const [listItemModal, setListItemModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -199,12 +200,12 @@ export default function TodoListsContainer({ setData, data }) {
       <Modal
         open={listModal}
         handleClose={() => setListModal(false)}
-        handleSubmit={() => formRef.current.handleSubmit()}
+        handleSubmit={() => listFormRef.current.handleSubmit()}
         title={editMode ? 'Edit List' : 'Add List'}
         loading={loading}
       >
         <Formik
-          innerRef={formRef}
+          innerRef={listFormRef}
           initialValues={{
             title: editMode ? selectedList.title : '',
           }}
@@ -238,12 +239,12 @@ export default function TodoListsContainer({ setData, data }) {
       <Modal
         open={listItemModal}
         handleClose={() => setListItemModal(false)}
-        handleSubmit={() => formRef.current.handleSubmit()}
+        handleSubmit={() => listItemFormRef.current.handleSubmit()}
         title={editMode ? 'Edit Item' : 'Add Item'}
         loading={loading}
       >
         <Formik
-          innerRef={formRef}
+          innerRef={listItemFormRef}
           initialValues={{
             title: editMode ? selectedListItem.title : '',
           }}
