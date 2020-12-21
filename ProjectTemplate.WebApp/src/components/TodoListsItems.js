@@ -23,6 +23,7 @@ export default function TodoListsItems({
   classes,
   openUpdateListItemModal,
   toggleListItem,
+  deleteListItem,
 }) {
   const getPriorityIcon = (val) => {
     switch (val) {
@@ -97,7 +98,11 @@ export default function TodoListsItems({
               >
                 <EditIcon />
               </IconButton>
-              <IconButton edge='end' aria-label='delete'>
+              <IconButton
+                edge='end'
+                aria-label='delete'
+                onClick={() => deleteListItem(item.id)}
+              >
                 <DeleteIcon />
               </IconButton>
             </ListItemSecondaryAction>

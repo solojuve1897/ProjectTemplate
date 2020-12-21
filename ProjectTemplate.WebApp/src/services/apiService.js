@@ -54,6 +54,13 @@ async function addTodoItem(payload) {
   return response.data;
 }
 
+async function deleteTodoItem(id) {
+  const response = await axios.delete(
+    process.env.REACT_APP_WebAPI + '/api/todoitems/' + id
+  );
+  return response.data;
+}
+
 export {
   getTodoLists,
   updateTodoList,
@@ -62,4 +69,5 @@ export {
   updateTodoItem,
   updateTodoItemDetails,
   addTodoItem,
+  deleteTodoItem,
 };

@@ -8,6 +8,11 @@ import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Select from '@material-ui/core/Select';
 import TodoLists from './TodoLists';
 import TodoListsItems from './TodoListsItems';
 import Modal from './Modal';
@@ -115,6 +120,7 @@ export default function TodoListsContainer({ setData, data }) {
       (item) => item.id === selectedListItem.id
     );
     const itemToUpdate = { ...selectedList.items[itemIndex], ...payload };
+    itemToUpdate.priority = parseInt(itemToUpdate.priority);
     await apiService.updateTodoItemDetails(selectedListItem.id, itemToUpdate);
     selectedList.items[itemIndex] = itemToUpdate;
     setData({ ...data });
@@ -134,9 +140,17 @@ export default function TodoListsContainer({ setData, data }) {
     );
     data.lists[listIndex].items.unshift(listItemToAdd);
     setData({ ...data });
-    // setSelectedList(data.lists[0]);
     setLoading(false);
     setListItemModal(false);
+  };
+
+  const deleteListItem = async (id) => {
+    setLoading(true);
+    const itemIndex = selectedList.items.findIndex((item) => item.id === id);
+    await apiService.deleteTodoItem(id);
+    selectedList.items.splice(itemIndex, 1);
+    setData({ ...data });
+    setLoading(false);
   };
 
   return (
@@ -192,6 +206,7 @@ export default function TodoListsContainer({ setData, data }) {
               setListItemModal(true);
             }}
             toggleListItem={toggleListItem}
+            deleteListItem={deleteListItem}
           />
         ) : (
           <Typography>This list is empty.</Typography>
@@ -247,9 +262,12 @@ export default function TodoListsContainer({ setData, data }) {
           innerRef={listItemFormRef}
           initialValues={{
             title: editMode ? selectedListItem.title : '',
+            priority: editMode ? selectedListItem.priority : '',
+            note: editMode ? selectedListItem.note ?? '' : '',
           }}
           validationSchema={Yup.object().shape({
             title: Yup.string().required('Required'),
+            priority: Yup.number().required('Required'),
           })}
           onSubmit={(values) =>
             editMode ? updateListItem(values) : addListItem(values)
@@ -265,6 +283,44 @@ export default function TodoListsContainer({ setData, data }) {
                     label='Title'
                     name='title'
                     value={values.title}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid xs={12} item>
+                  <FormControl
+                    fullWidth
+                    error={Boolean(touched.priority && errors.priority)}
+                  >
+                    <InputLabel>Priority</InputLabel>
+                    <Select
+                      style={{ textAlign: 'left' }}
+                      value={values.priority}
+                      name='priority'
+                      onChange={handleChange}
+                    >
+                      {Object.keys(data.priorityLevels).map((key) => {
+                        return (
+                          <MenuItem key={key} value={key}>
+                            {data.priorityLevels[key]}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                    {Boolean(touched.priority && errors.priority) && (
+                      <FormHelperText>Required</FormHelperText>
+                    )}
+                  </FormControl>
+                </Grid>
+                <Grid xs={12} item>
+                  <TextField
+                    label='Note'
+                    name='note'
+                    multiline
+                    rowsMax={4}
+                    rows={4}
+                    value={values.note}
                     onBlur={handleBlur}
                     onChange={handleChange}
                     fullWidth
