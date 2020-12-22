@@ -1,5 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
 import { Formik } from 'formik';
+import signalRConnection, {
+  startSignalRConnection,
+  stopSignalRConnection,
+} from '../services/signalRService';
 import * as Yup from 'yup';
 import * as apiService from '../services/apiService';
 import { makeStyles } from '@material-ui/core/styles';
@@ -122,10 +127,24 @@ export default function TodoListsContainer({ setData, data }) {
     const itemToUpdate = { ...selectedList.items[itemIndex], ...payload };
     itemToUpdate.priority = parseInt(itemToUpdate.priority);
     await apiService.updateTodoItemDetails(selectedListItem.id, itemToUpdate);
-    selectedList.items[itemIndex] = itemToUpdate;
-    setData({ ...data });
+    commit_updateListItem(itemToUpdate);
     setLoading(false);
     setListItemModal(false);
+  };
+
+  const commit_updateListItem = (payload) => {
+    const listIndex = data.lists.findIndex(
+      (list) => list.id === payload.listId
+    );
+    const itemIndex = data.lists[listIndex].items.findIndex(
+      (item) => item.id === payload.id
+    );
+    const itemToUpdate = {
+      ...data.lists[listIndex].items[itemIndex],
+      ...payload,
+    };
+    data.lists[listIndex].items[itemIndex] = itemToUpdate;
+    setData({ ...data });
   };
 
   const addListItem = async (payload) => {
@@ -134,24 +153,64 @@ export default function TodoListsContainer({ setData, data }) {
       listId: selectedList.id,
       ...payload,
     };
+    payload.priority = parseInt(payload.priority);
     const listItemToAdd = await apiService.addTodoItem(payload);
-    const listIndex = data.lists.findIndex(
-      (list) => list.id === selectedList.id
-    );
-    data.lists[listIndex].items.unshift(listItemToAdd);
-    setData({ ...data });
+    commit_addListItem(listItemToAdd);
     setLoading(false);
     setListItemModal(false);
   };
 
+  const commit_addListItem = async (payload) => {
+    const listIndex = data.lists.findIndex(
+      (list) => list.id === payload.listId
+    );
+    data.lists[listIndex].items.unshift(payload);
+    setData({ ...data });
+  };
+
   const deleteListItem = async (id) => {
     setLoading(true);
-    const itemIndex = selectedList.items.findIndex((item) => item.id === id);
     await apiService.deleteTodoItem(id);
-    selectedList.items.splice(itemIndex, 1);
-    setData({ ...data });
+    commit_deleteListItem({ listId: selectedList.id, id: id });
     setLoading(false);
   };
+
+  const commit_deleteListItem = async (payload) => {
+    const listIndex = data.lists.findIndex(
+      (list) => list.id === payload.listId
+    );
+    const itemIndex = data.lists[listIndex].items.findIndex(
+      (item) => item.id === payload.id
+    );
+    data.lists[listIndex].items.splice(itemIndex, 1);
+    setData({ ...data });
+  };
+
+  useEffect(() => {
+    startSignalRConnection().then(() => {
+      axios.defaults.headers.common['X-WebSocket-ConnectionId'] =
+        signalRConnection.connectionId;
+      signalRConnection.on('updateListItem', (_, data) => {
+        if (signalRConnection.connectionId !== data.connectionId) {
+          commit_updateListItem(data.payload);
+        }
+      });
+      signalRConnection.on('addListItem', (_, data) => {
+        if (signalRConnection.connectionId !== data.connectionId) {
+          commit_addListItem(data.payload);
+        }
+      });
+      signalRConnection.on('deleteListItem', (_, data) => {
+        if (signalRConnection.connectionId !== data.connectionId) {
+          commit_deleteListItem(data.payload);
+        }
+      });
+    });
+    return function cleanup() {
+      stopSignalRConnection();
+    };
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <Grid container spacing={2}>

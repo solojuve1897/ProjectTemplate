@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using ProjectTemplate.Application;
 using ProjectTemplate.Application.Common.Interfaces;
 using ProjectTemplate.Infrastructure;
+using ProjectTemplate.Infrastructure.Services.SignalR;
 using ProjectTemplate.WebAPI.Filters;
 using ProjectTemplate.WebAPI.Services;
 using System;
@@ -91,6 +92,8 @@ namespace ProjectTemplate.WebAPI
                     }
                 });
             });
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -116,6 +119,11 @@ namespace ProjectTemplate.WebAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<TodoHub>("/hub");
             });
         }
     }

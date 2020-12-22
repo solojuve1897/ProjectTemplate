@@ -4,6 +4,7 @@ using ProjectTemplate.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ProjectTemplate.Infrastructure.Services.SignalR;
 
 namespace ProjectTemplate.Infrastructure
 {
@@ -19,6 +20,8 @@ namespace ProjectTemplate.Infrastructure
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
 
             services.AddTransient<IDateTime, DateTimeService>();
+
+            services.AddScoped<ITodoHubService, TodoHubService>();
 
             services.AddAuthorization(options =>
             {

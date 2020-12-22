@@ -19,10 +19,12 @@ namespace ProjectTemplate.Application.TodoItems.Commands.UpdateTodoItem
     public class UpdateTodoItemCommandHandler : IRequestHandler<UpdateTodoItemCommand>
     {
         private readonly IApplicationDbContext _context;
+        private readonly ITodoHubService _todoHubService;
 
-        public UpdateTodoItemCommandHandler(IApplicationDbContext context)
+        public UpdateTodoItemCommandHandler(IApplicationDbContext context, ITodoHubService todoHubService)
         {
             _context = context;
+            _todoHubService = todoHubService;
         }
 
         public async Task<Unit> Handle(UpdateTodoItemCommand request, CancellationToken cancellationToken)
@@ -38,6 +40,7 @@ namespace ProjectTemplate.Application.TodoItems.Commands.UpdateTodoItem
             entity.Done = request.Done;
 
             await _context.SaveChangesAsync(cancellationToken);
+            await _todoHubService.SendMessage("updateListItem", entity);
 
             return Unit.Value;
         }
