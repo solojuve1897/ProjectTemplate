@@ -46,9 +46,11 @@ namespace ProjectTemplate.Application.TodoItems.Commands.CreateTodoItem
             _context.TodoItems.Add(entity);
 
             await _context.SaveChangesAsync(cancellationToken);
-            await _todoHubService.SendMessage("addListItem", entity);
 
-            return _mapper.Map<TodoItemDto>(entity);
+            var entityDto = _mapper.Map<TodoItemDto>(entity);
+            await _todoHubService.SendMessage("addListItem", entityDto);
+
+            return entityDto;
         }
     }
 }

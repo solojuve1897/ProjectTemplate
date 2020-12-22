@@ -5,6 +5,8 @@ using ProjectTemplate.Domain.Enums;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
+using ProjectTemplate.Application.TodoLists.Queries.GetTodos;
 
 namespace ProjectTemplate.Application.TodoItems.Commands.UpdateTodoItemDetail
 {
@@ -25,11 +27,13 @@ namespace ProjectTemplate.Application.TodoItems.Commands.UpdateTodoItemDetail
     {
         private readonly IApplicationDbContext _context;
         private readonly ITodoHubService _todoHubService;
+        private readonly IMapper _mapper;
 
-        public UpdateTodoItemDetailCommandHandler(IApplicationDbContext context, ITodoHubService todoHubService)
+        public UpdateTodoItemDetailCommandHandler(IApplicationDbContext context, ITodoHubService todoHubService, IMapper mapper)
         {
             _context = context;
             _todoHubService = todoHubService;
+            _mapper = mapper;
         }
 
         public async Task<Unit> Handle(UpdateTodoItemDetailCommand request, CancellationToken cancellationToken)
@@ -47,7 +51,9 @@ namespace ProjectTemplate.Application.TodoItems.Commands.UpdateTodoItemDetail
             entity.Note = request.Note;
 
             await _context.SaveChangesAsync(cancellationToken);
-            await _todoHubService.SendMessage("updateListItem", entity);
+
+            var entityDto = _mapper.Map<TodoItemDto>(entity);
+            await _todoHubService.SendMessage("updateListItem", entityDto);
 
             return Unit.Value;
         }
