@@ -37,6 +37,7 @@ namespace ProjectTemplate.Application.TodoItems.Commands.DeleteTodoItem
             _context.TodoItems.Remove(entity);
 
             await _context.SaveChangesAsync(cancellationToken);
+
             await _todoHubService.SendMessage("deleteListItem", payload);
 
             return Unit.Value;

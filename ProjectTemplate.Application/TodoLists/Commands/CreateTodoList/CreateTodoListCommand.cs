@@ -17,24 +17,27 @@ namespace ProjectTemplate.Application.TodoLists.Commands.CreateTodoList
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ITodoHubService _todoHubService;
 
-        public CreateTodoListCommandHandler(IApplicationDbContext context, IMapper mapper)
+        public CreateTodoListCommandHandler(IApplicationDbContext context, IMapper mapper, ITodoHubService todoHubService)
         {
             _context = context;
             _mapper = mapper;
+            _todoHubService = todoHubService;
         }
 
         public async Task<TodoListDto> Handle(CreateTodoListCommand request, CancellationToken cancellationToken)
         {
             var entity = new TodoList();
-
             entity.Title = request.Title;
 
             _context.TodoLists.Add(entity);
-
             await _context.SaveChangesAsync(cancellationToken);
 
-            return _mapper.Map<TodoListDto>(entity);
+            var entityDto = _mapper.Map<TodoListDto>(entity);
+            await _todoHubService.SendMessage("addList", entityDto);
+
+            return entityDto;
         }
     }
 }

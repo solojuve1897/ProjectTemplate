@@ -76,11 +76,15 @@ export default function TodoListsContainer({ setData, data }) {
       title: title,
     };
     const listToAdd = await apiService.addTodoList(payload);
-    data.lists.unshift(listToAdd);
-    setData({ ...data });
+    commit_addList(listToAdd);
     setSelectedList(data.lists[0]);
     setLoading(false);
     setListModal(false);
+  };
+
+  const commit_addList = (payload) => {
+    data.lists.unshift(payload);
+    setData({ ...data });
   };
 
   const updateList = async (title) => {
@@ -90,24 +94,35 @@ export default function TodoListsContainer({ setData, data }) {
       title: title,
     };
     await apiService.updateTodoList(selectedList.id, payload);
-    const listIndex = data.lists.findIndex((list) => list.id === payload.id);
-    data.lists[listIndex] = { ...data.lists[listIndex], ...payload };
-    setSelectedList(data.lists[listIndex]);
+    commit_updateList(payload);
     setLoading(false);
     setListModal(false);
+  };
+
+  const commit_updateList = (payload) => {
+    const listIndex = data.lists.findIndex((list) => list.id === payload.id);
+    data.lists[listIndex] = { ...data.lists[listIndex], ...payload };
+    setData({ ...data });
+    if (payload.id === selectedList.id) {
+      setSelectedList({ ...selectedList, ...payload });
+    }
   };
 
   const deleteList = async () => {
     setLoading(true);
     await apiService.deleteTodoList(selectedList.id);
+    commit_deleteList({ listId: selectedList.id });
+    setLoading(false);
+    setListModal(false);
+  };
+
+  const commit_deleteList = (payload) => {
     const listIndex = data.lists.findIndex(
-      (list) => list.id === selectedList.id
+      (list) => list.id === payload.listId
     );
     data.lists.splice(listIndex, 1);
     setData({ ...data });
     setSelectedList(data.lists[0]);
-    setLoading(false);
-    setListModal(false);
   };
 
   const toggleListItem = (id, done) => {
@@ -160,7 +175,7 @@ export default function TodoListsContainer({ setData, data }) {
     setListItemModal(false);
   };
 
-  const commit_addListItem = async (payload) => {
+  const commit_addListItem = (payload) => {
     const listIndex = data.lists.findIndex(
       (list) => list.id === payload.listId
     );
@@ -175,7 +190,7 @@ export default function TodoListsContainer({ setData, data }) {
     setLoading(false);
   };
 
-  const commit_deleteListItem = async (payload) => {
+  const commit_deleteListItem = (payload) => {
     const listIndex = data.lists.findIndex(
       (list) => list.id === payload.listId
     );
@@ -192,17 +207,38 @@ export default function TodoListsContainer({ setData, data }) {
         signalRConnection.connectionId;
       signalRConnection.on('updateListItem', (_, data) => {
         if (signalRConnection.connectionId !== data.connectionId) {
+          console.log('updateListItem');
           commit_updateListItem(data.payload);
         }
       });
       signalRConnection.on('addListItem', (_, data) => {
         if (signalRConnection.connectionId !== data.connectionId) {
+          console.log('addListItem');
           commit_addListItem(data.payload);
         }
       });
       signalRConnection.on('deleteListItem', (_, data) => {
         if (signalRConnection.connectionId !== data.connectionId) {
+          console.log('deleteListItem');
           commit_deleteListItem(data.payload);
+        }
+      });
+      signalRConnection.on('addList', (_, data) => {
+        if (signalRConnection.connectionId !== data.connectionId) {
+          console.log('addList');
+          commit_addList(data.payload);
+        }
+      });
+      signalRConnection.on('updateList', (_, data) => {
+        if (signalRConnection.connectionId !== data.connectionId) {
+          console.log('updateList');
+          commit_updateList(data.payload);
+        }
+      });
+      signalRConnection.on('deleteList', (_, data) => {
+        if (signalRConnection.connectionId !== data.connectionId) {
+          console.log('deleteList');
+          commit_deleteList(data.payload);
         }
       });
     });

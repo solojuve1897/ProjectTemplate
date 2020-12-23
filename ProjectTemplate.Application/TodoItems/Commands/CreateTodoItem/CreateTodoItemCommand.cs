@@ -44,7 +44,6 @@ namespace ProjectTemplate.Application.TodoItems.Commands.CreateTodoItem
             };
 
             _context.TodoItems.Add(entity);
-
             await _context.SaveChangesAsync(cancellationToken);
 
             var entityDto = _mapper.Map<TodoItemDto>(entity);

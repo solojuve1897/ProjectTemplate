@@ -17,10 +17,12 @@ namespace ProjectTemplate.Application.TodoLists.Commands.DeleteTodoList
     public class DeleteTodoListCommandHandler : IRequestHandler<DeleteTodoListCommand>
     {
         private readonly IApplicationDbContext _context;
+        private readonly ITodoHubService _todoHubService;
 
-        public DeleteTodoListCommandHandler(IApplicationDbContext context)
+        public DeleteTodoListCommandHandler(IApplicationDbContext context, ITodoHubService todoHubService)
         {
             _context = context;
+            _todoHubService = todoHubService;
         }
 
         public async Task<Unit> Handle(DeleteTodoListCommand request, CancellationToken cancellationToken)
@@ -37,6 +39,8 @@ namespace ProjectTemplate.Application.TodoLists.Commands.DeleteTodoList
             _context.TodoLists.Remove(entity);
 
             await _context.SaveChangesAsync(cancellationToken);
+
+            await _todoHubService.SendMessage("deleteList", new { listId = request.Id });
 
             return Unit.Value;
         }
