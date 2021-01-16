@@ -8,6 +8,7 @@ using MediatR;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjectTemplate.Application.TodoItems.Queries.GetTodoItemsWithPagination
 {
@@ -32,6 +33,7 @@ namespace ProjectTemplate.Application.TodoItems.Queries.GetTodoItemsWithPaginati
         public async Task<PaginatedList<TodoItemDto>> Handle(GetTodoItemsWithPaginationQuery request, CancellationToken cancellationToken)
         {
             return await _context.TodoItems
+                .AsNoTracking()
                 .Where(x => x.ListId == request.ListId)
                 .OrderBy(x => x.Title)
                 .ProjectTo<TodoItemDto>(_mapper.ConfigurationProvider)
